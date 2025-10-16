@@ -345,7 +345,7 @@ const PRESETS = {
     description: "Configure your own settings",
     fieldsToRemove: {},
   },
-}
+};
 
 // Main App Component
 export default function EmailHeaderProcessor() {
