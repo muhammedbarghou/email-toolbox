@@ -17,7 +17,7 @@ function App() {
         <Suspense fallback={<div className="p-4">Loading...</div>}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/email-header-processor" element={<EmailHeaderProcessor />} />
+            <Route path="/header-processor" element={<EmailHeaderProcessor />} />
             <Route path="/eml-to-txt-converter" element={<EmlToTxtConverter />} />
             <Route path="/ip-comparator" element={<IPComparator />} />
           </Routes>

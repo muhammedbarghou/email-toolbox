@@ -1,4 +1,4 @@
-import { InboxIcon, ZapIcon } from "lucide-react"
+import { InboxIcon, ZapIcon, Home } from "lucide-react"
 import Logo from "@/components/logo"
 import { Button } from "@/components/ui/button"
 import {
@@ -15,7 +15,8 @@ import {
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "/email-header-processor", label: "Header Processor", icon: InboxIcon },
+  { href: "/", label: "Home", icon: Home },
+  { href: "/header-processor", label: "Header Processor", icon: InboxIcon },
   { href: "/eml-to-txt-converter", label: "EML to TXT Converter", icon: ZapIcon },
   { href: "/ip-comparator", label: "IP Comparator", icon: ZapIcon },
 
