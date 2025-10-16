@@ -3,7 +3,7 @@ export const config = {
   };
   
   const OPENAI_API = "https://api.openai.com/v1/chat/completions";
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+  const apiKey = process.env.OPENAI_API_KEY as string;
   
   const PROMPT_SYSTEM = `
   You are an expert email template refactoring assistant.
