@@ -1,12 +1,8 @@
-import Navbar from "@/components/Nav"
-import { Outlet } from "react-router-dom"
+
 const Home = () => {
   return (
     <div>
-        <Navbar />
-        <div className="px-4 py-6">
-          <Outlet />
-        </div>
+       
     </div>
   )
 }
