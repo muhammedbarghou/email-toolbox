@@ -4,24 +4,24 @@ import EmlToTxtConverter from './Pages/EmlToTxtConverter'
 import IPComparator from './Pages/IPComparator'
 import Navbar from './components/Nav'
 import { Toaster } from 'sonner'
-import { ThemeProvider } from "@/components/theme-provider"
+import { Suspense } from 'react'
 
 
 function App() {
 
   return (
     <div className="min-h-screen ">
-      <ThemeProvider>
       <Navbar />
       <BrowserRouter>
-        <Routes>
-          <Route path="/email-header-processor" element={<EmailHeaderProcessor />} />
-          <Route path="/eml-to-txt-converter" element={<EmlToTxtConverter />} />
-          <Route path="/ip-comparator" element={<IPComparator />} />
-        </Routes>
+        <Suspense fallback={<div className="p-4">Loading...</div>}>
+          <Routes>
+            <Route path="/email-header-processor" element={<EmailHeaderProcessor />} />
+            <Route path="/eml-to-txt-converter" element={<EmlToTxtConverter />} />
+            <Route path="/ip-comparator" element={<IPComparator />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     <Toaster />
-    </ThemeProvider>
     </div>
 
   )
