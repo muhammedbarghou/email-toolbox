@@ -1,5 +1,4 @@
 import { InboxIcon, ZapIcon } from "lucide-react"
-import { ModeToggle } from "./mode-toggle"
 import Logo from "@/components/logo"
 import { Button } from "@/components/ui/button"
 import {
@@ -121,7 +120,7 @@ export default function Navbar() {
         </NavigationMenu>
         {/* Right side */}
         <div className="flex flex-1 items-center justify-end gap-2">
-          <ModeToggle />
+          
         </div>
       </div>
     </header>
