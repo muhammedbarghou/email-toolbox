@@ -1,13 +1,6 @@
 {
-  "version": 2,
-  "functions": {
-    "api/generate.js": {
-      "runtime": "edge"
-    }
-  },
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1.js" },
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html" }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
+
