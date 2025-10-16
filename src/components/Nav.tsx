@@ -19,6 +19,7 @@ const navigationLinks = [
   { href: "/header-processor", label: "Header Processor", icon: InboxIcon },
   { href: "/eml-to-txt-converter", label: "EML to TXT Converter", icon: ZapIcon },
   { href: "/ip-comparator", label: "IP Comparator", icon: ZapIcon },
+  { href: "/chat", label: "Chat", icon: ZapIcon },
 
 ]
 
