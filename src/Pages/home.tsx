@@ -1,6 +1,6 @@
 import Navbar from "@/components/Nav"
 import { Outlet } from "react-router-dom"
-const home = () => {
+const Home = () => {
   return (
     <div>
         <Navbar />
@@ -11,4 +11,4 @@ const home = () => {
   )
 }
 
-export default home
+export default Home
