@@ -1,4 +1,4 @@
-import { InboxIcon, ZapIcon, Home } from "lucide-react"
+import { InboxIcon, ZapIcon } from "lucide-react"
 import Logo from "@/components/logo"
 import { Button } from "@/components/ui/button"
 import {
@@ -13,20 +13,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-// Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "/", label: "Home", icon: Home },
   { href: "/header-processor", label: "Header Processor", icon: InboxIcon },
   { href: "/eml-to-txt-converter", label: "EML to TXT Converter", icon: ZapIcon },
   { href: "/ip-comparator", label: "IP Comparator", icon: ZapIcon },
-  { href: "/chat", label: "Chat", icon: ZapIcon },
-
 ]
 
 export default function Navbar() {
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-background px-4 md:px-6">
+    <header className="sticky top-0 z-50 border-b px-4 md:px-6">
       <div className="flex h-16 items-center justify-between gap-4">
         {/* Left side */}
         <div className="flex flex-1 items-center gap-2">
@@ -92,7 +88,7 @@ export default function Navbar() {
           </Popover>
           {/* Logo */}
           <div className="flex items-center">
-            <a href="#" className="text-primary hover:text-primary/90">
+            <a href="/" className="text-primary hover:text-primary/90">
               <Logo />
             </a>
           </div>
@@ -122,7 +118,6 @@ export default function Navbar() {
         </NavigationMenu>
         {/* Right side */}
         <div className="flex flex-1 items-center justify-end gap-2">
-          
         </div>
       </div>
     </header>
