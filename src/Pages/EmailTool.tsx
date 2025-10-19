@@ -382,25 +382,42 @@ export default function EmailHeaderProcessor() {
   }, [files, config])
 
   const handleDownloadAll = useCallback(() => {
-    const completedFiles = files.filter(f => f.status === 'completed')
-    
-    if (completedFiles.length === 0) {
-      alert("No processed files to download")
-      return
-    }
+  const completedFiles = files.filter(f => f.status === 'completed')
+  
+  if (completedFiles.length === 0) {
+    alert("No processed files to download")
+    return
+  }
 
-    completedFiles.forEach(file => {
-      const blob = new Blob([file.processedContent], { type: "text/plain" })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement("a")
-      a.href = url
-      a.download = `processed-${file.name}`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      URL.revokeObjectURL(url)
-    })
-  }, [files])
+  completedFiles.forEach(file => {
+    const blob = new Blob([file.processedContent], { type: "text/plain" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `processed-${file.name.replace('.eml', '.txt')}` // Changed here
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  })
+}, [files])
+
+const handleDownloadSingle = useCallback((fileId: string) => {
+  const file = files.find(f => f.id === fileId)
+  if (!file || file.status !== 'completed') {
+    return
+  }
+
+  const blob = new Blob([file.processedContent], { type: "text/plain" })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement("a")
+  a.href = url
+  a.download = `processed-${file.name.replace('.eml', '.txt')}` // Changed here
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}, [files])
 
   const handleDownloadSingle = useCallback((fileId: string) => {
     const file = files.find(f => f.id === fileId)
