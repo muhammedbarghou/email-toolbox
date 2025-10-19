@@ -124,18 +124,18 @@ export default function EmlToTxtConverter() {
 
     toast.loading(`${processedFile.name}_${timestamp}.txt`,)
   }
+const handleDownloadAll = () => {
+  const completedFiles = processedFiles.filter((f) => f.status === "completed" && f.content.trim())
 
-  const handleDownloadAll = () => {
-    const completedFiles = processedFiles.filter((f) => f.status === "completed" && f.content.trim())
+  if (completedFiles.length === 0) {
+    toast.message("Process some files first")
+    return
+  }
 
-    if (completedFiles.length === 0) {
-      toast.message("Process some files first")
-      return
-    }
+  const timestamp = getTimestamp()
 
-    const timestamp = getTimestamp()
-
-    completedFiles.forEach((file) => {
+  completedFiles.forEach((file, index) => {
+    setTimeout(() => {
       const blob = new Blob([file.content], {
         type: "text/plain;charset=utf-8",
       })
@@ -145,10 +145,12 @@ export default function EmlToTxtConverter() {
       link.download = `${file.name}_${timestamp}.txt`
       link.click()
       URL.revokeObjectURL(url)
-    })
+    }, index * 200) // 200ms delay between each download
+  })
 
-    toast.success(`${completedFiles.length} file(s) downloaded`,)
-  }
+  toast.success(`${completedFiles.length} file(s) downloaded`)
+}
+
 
   const handleClearAll = () => {
     clearFiles()
