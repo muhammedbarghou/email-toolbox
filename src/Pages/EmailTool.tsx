@@ -1,3 +1,7 @@
+"use client"
+
+import type React from "react"
+
 import { useState, useCallback, useMemo } from "react"
 import {
   Copy,
@@ -24,7 +28,7 @@ interface FileItem {
   name: string
   originalContent: string
   processedContent: string
-  status: 'pending' | 'processing' | 'completed' | 'error'
+  status: "pending" | "processing" | "completed" | "error"
 }
 
 const PRESETS = {
@@ -182,7 +186,13 @@ function processEmail(input: string, config: any): string {
             cleanName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1)
           }
 
-          outputLines.push(`From: "${cleanName}" <noreply@[P_RPATH]>`)
+          const emailPart = fromMatch[3]
+          let localPart = emailPart
+          if (emailPart.includes("@")) {
+            localPart = emailPart.split("@")[0]
+          }
+
+          outputLines.push(`From: "${cleanName}" <${localPart}@[P_RPATH]>`)
         } else {
           outputLines.push("From: <noreply@[P_RPATH]>")
         }
@@ -275,8 +285,7 @@ function processEmail(input: string, config: any): string {
 
   if (!hasListUnsubscribe) {
     const senderIndex = outputLines.findIndex((line) => line.startsWith("Sender:"))
-    const insertIndex =
-      senderIndex !== -1 ? senderIndex + 1 : fromIndex !== -1 ? fromIndex + 1 : outputLines.length
+    const insertIndex = senderIndex !== -1 ? senderIndex + 1 : fromIndex !== -1 ? fromIndex + 1 : outputLines.length
     outputLines.splice(
       insertIndex,
       0,
@@ -304,50 +313,53 @@ export default function EmailHeaderProcessor() {
   const [copied, setCopied] = useState(false)
 
   const selectedFile = useMemo(() => {
-    return files.find(f => f.id === selectedFileId)
+    return files.find((f) => f.id === selectedFileId)
   }, [files, selectedFileId])
 
-  const handleFilesUpload = useCallback(async (fileList: FileList) => {
-    const fileArray = Array.from(fileList).filter(file => file.name.endsWith('.eml'))
-    
-    if (fileArray.length === 0) {
-      alert("Please upload .eml files only")
-      return
-    }
+  const handleFilesUpload = useCallback(
+    async (fileList: FileList) => {
+      const fileArray = Array.from(fileList).filter((file) => file.name.endsWith(".eml"))
 
-    if (files.length + fileArray.length > 20) {
-      alert("Maximum 20 files allowed")
-      return
-    }
-
-    const newFiles: FileItem[] = []
-    
-    for (const file of fileArray) {
-      try {
-        const content = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader()
-          reader.onload = (e) => resolve(e.target?.result as string)
-          reader.onerror = () => reject(new Error("Failed to read file"))
-          reader.readAsText(file)
-        })
-
-        newFiles.push({
-          id: `${Date.now()}-${Math.random()}`,
-          name: file.name,
-          originalContent: content,
-          processedContent: '',
-          status: 'pending'
-        })
-      } catch (err) {
-        console.error(`Failed to read ${file.name}`)
+      if (fileArray.length === 0) {
+        alert("Please upload .eml files only")
+        return
       }
-    }
 
-    setFiles(prev => [...prev, ...newFiles])
-    if (newFiles.length > 0 && !selectedFileId) {
-      setSelectedFileId(newFiles[0].id)
-    }
-  }, [files.length, selectedFileId])
+      if (files.length + fileArray.length > 20) {
+        alert("Maximum 20 files allowed")
+        return
+      }
+
+      const newFiles: FileItem[] = []
+
+      for (const file of fileArray) {
+        try {
+          const content = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onload = (e) => resolve(e.target?.result as string)
+            reader.onerror = () => reject(new Error("Failed to read file"))
+            reader.readAsText(file)
+          })
+
+          newFiles.push({
+            id: `${Date.now()}-${Math.random()}`,
+            name: file.name,
+            originalContent: content,
+            processedContent: "",
+            status: "pending",
+          })
+        } catch (err) {
+          console.error(`Failed to read ${file.name}`)
+        }
+      }
+
+      setFiles((prev) => [...prev, ...newFiles])
+      if (newFiles.length > 0 && !selectedFileId) {
+        setSelectedFileId(newFiles[0].id)
+      }
+    },
+    [files.length, selectedFileId],
+  )
 
   const handleProcessAll = useCallback(async () => {
     if (files.length === 0) {
@@ -358,23 +370,23 @@ export default function EmailHeaderProcessor() {
     setProcessing(true)
 
     const updatedFiles = [...files]
-    
+
     for (let i = 0; i < updatedFiles.length; i++) {
-      if (updatedFiles[i].status === 'completed') continue
-      
-      updatedFiles[i].status = 'processing'
+      if (updatedFiles[i].status === "completed") continue
+
+      updatedFiles[i].status = "processing"
       setFiles([...updatedFiles])
-      
-      await new Promise(resolve => setTimeout(resolve, 50))
-      
+
+      await new Promise((resolve) => setTimeout(resolve, 50))
+
       try {
         const processed = processEmail(updatedFiles[i].originalContent, config)
         updatedFiles[i].processedContent = processed
-        updatedFiles[i].status = 'completed'
+        updatedFiles[i].status = "completed"
       } catch (err) {
-        updatedFiles[i].status = 'error'
+        updatedFiles[i].status = "error"
       }
-      
+
       setFiles([...updatedFiles])
     }
 
@@ -382,50 +394,56 @@ export default function EmailHeaderProcessor() {
   }, [files, config])
 
   const handleDownloadAll = useCallback(() => {
-  const completedFiles = files.filter(f => f.status === 'completed')
-  
-  if (completedFiles.length === 0) {
-    alert("No processed files to download")
-    return
-  }
+    const completedFiles = files.filter((f) => f.status === "completed")
 
-  completedFiles.forEach(file => {
-    const blob = new Blob([file.processedContent], { type: "text/plain" })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = `processed-${file.name.replace('.eml', '.txt')}` // Changed here
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-  })
-}, [files])
-
-const handleDownloadSingle = useCallback((fileId: string) => {
-  const file = files.find(f => f.id === fileId)
-  if (!file || file.status !== 'completed') {
-    return
-  }
-
-  const blob = new Blob([file.processedContent], { type: "text/plain" })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement("a")
-  a.href = url
-  a.download = `processed-${file.name.replace('.eml', '.txt')}` // Changed here
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
-}, [files])
-
-  const handleRemoveFile = useCallback((fileId: string) => {
-    setFiles(prev => prev.filter(f => f.id !== fileId))
-    if (selectedFileId === fileId) {
-      const remainingFiles = files.filter(f => f.id !== fileId)
-      setSelectedFileId(remainingFiles.length > 0 ? remainingFiles[0].id : null)
+    if (completedFiles.length === 0) {
+      alert("No processed files to download")
+      return
     }
-  }, [files, selectedFileId])
+
+    completedFiles.forEach((file) => {
+      const blob = new Blob([file.processedContent], { type: "text/plain" })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = `processed-${file.name.replace(".eml", ".txt")}` // Changed here
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    })
+  }, [files])
+
+  const handleDownloadSingle = useCallback(
+    (fileId: string) => {
+      const file = files.find((f) => f.id === fileId)
+      if (!file || file.status !== "completed") {
+        return
+      }
+
+      const blob = new Blob([file.processedContent], { type: "text/plain" })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = `processed-${file.name.replace(".eml", ".txt")}` // Changed here
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    },
+    [files],
+  )
+
+  const handleRemoveFile = useCallback(
+    (fileId: string) => {
+      setFiles((prev) => prev.filter((f) => f.id !== fileId))
+      if (selectedFileId === fileId) {
+        const remainingFiles = files.filter((f) => f.id !== fileId)
+        setSelectedFileId(remainingFiles.length > 0 ? remainingFiles[0].id : null)
+      }
+    },
+    [files, selectedFileId],
+  )
 
   const handleClearAll = useCallback(() => {
     setFiles([])
@@ -442,15 +460,18 @@ const handleDownloadSingle = useCallback((fileId: string) => {
     }
   }, [])
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setDragActive(false)
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
+      setDragActive(false)
 
-    if (e.dataTransfer.files) {
-      handleFilesUpload(e.dataTransfer.files)
-    }
-  }, [handleFilesUpload])
+      if (e.dataTransfer.files) {
+        handleFilesUpload(e.dataTransfer.files)
+      }
+    },
+    [handleFilesUpload],
+  )
 
   const handlePresetChange = useCallback((preset: keyof typeof PRESETS) => {
     setSelectedPreset(preset)
@@ -469,11 +490,11 @@ const handleDownloadSingle = useCallback((fileId: string) => {
 
   const stats = useMemo(() => {
     const total = files.length
-    const completed = files.filter(f => f.status === 'completed').length
-    const pending = files.filter(f => f.status === 'pending').length
-    const processingCount = files.filter(f => f.status === 'processing').length
-    const error = files.filter(f => f.status === 'error').length
-    
+    const completed = files.filter((f) => f.status === "completed").length
+    const pending = files.filter((f) => f.status === "pending").length
+    const processingCount = files.filter((f) => f.status === "processing").length
+    const error = files.filter((f) => f.status === "error").length
+
     return { total, completed, pending, processing: processingCount, error }
   }, [files])
 
@@ -601,7 +622,7 @@ const handleDownloadSingle = useCallback((fileId: string) => {
               </h2>
               <div className="flex gap-2">
                 <label className="cursor-pointer">
-                  <Button variant="outline" size="sm" className="gap-2" asChild>
+                  <Button variant="outline" size="sm" className="gap-2 bg-transparent" asChild>
                     <span>
                       <Upload size={16} />
                     </span>
@@ -626,7 +647,7 @@ const handleDownloadSingle = useCallback((fileId: string) => {
               onDragOver={handleDrag}
               onDrop={handleDrop}
               className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-                dragActive ? 'border-primary bg-primary/10' : 'border-border bg-card'
+                dragActive ? "border-primary bg-primary/10" : "border-border bg-card"
               }`}
             >
               <FolderOpen size={48} className="mx-auto mb-4 text-muted-foreground" />
@@ -640,20 +661,26 @@ const handleDownloadSingle = useCallback((fileId: string) => {
                 <Card
                   key={file.id}
                   className={`p-3 cursor-pointer transition-all ${
-                    selectedFileId === file.id ? 'border-primary bg-accent' : 'border-border hover:border-muted-foreground'
+                    selectedFileId === file.id
+                      ? "border-primary bg-accent"
+                      : "border-border hover:border-muted-foreground"
                   }`}
                   onClick={() => setSelectedFileId(file.id)}
                 >
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2 flex-1 min-w-0">
-                      {file.status === 'completed' && <CheckCircle2 size={16} className="text-green-400 flex-shrink-0" />}
-                      {file.status === 'pending' && <Clock size={16} className="text-yellow-400 flex-shrink-0" />}
-                      {file.status === 'processing' && <RefreshCw size={16} className="text-blue-400 animate-spin flex-shrink-0" />}
-                      {file.status === 'error' && <AlertCircle size={16} className="text-red-400 flex-shrink-0" />}
+                      {file.status === "completed" && (
+                        <CheckCircle2 size={16} className="text-green-400 flex-shrink-0" />
+                      )}
+                      {file.status === "pending" && <Clock size={16} className="text-yellow-400 flex-shrink-0" />}
+                      {file.status === "processing" && (
+                        <RefreshCw size={16} className="text-blue-400 animate-spin flex-shrink-0" />
+                      )}
+                      {file.status === "error" && <AlertCircle size={16} className="text-red-400 flex-shrink-0" />}
                       <span className="text-sm truncate">{file.name}</span>
                     </div>
                     <div className="flex gap-1 flex-shrink-0">
-                      {file.status === 'completed' && (
+                      {file.status === "completed" && (
                         <Button
                           variant="ghost"
                           size="sm"
@@ -706,7 +733,7 @@ const handleDownloadSingle = useCallback((fileId: string) => {
                   onClick={handleDownloadAll}
                   disabled={stats.completed === 0}
                   variant="outline"
-                  className="w-full gap-2"
+                  className="w-full gap-2 bg-transparent"
                 >
                   <Download size={16} />
                   Download All ({stats.completed})
@@ -719,9 +746,9 @@ const handleDownloadSingle = useCallback((fileId: string) => {
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
                 <Code2 size={20} />
-                {selectedFile ? selectedFile.name : 'Preview'}
+                {selectedFile ? selectedFile.name : "Preview"}
               </h2>
-              {selectedFile && selectedFile.status === 'completed' && (
+              {selectedFile && selectedFile.status === "completed" && (
                 <Button
                   variant="outline"
                   size="sm"
@@ -741,22 +768,17 @@ const handleDownloadSingle = useCallback((fileId: string) => {
                   {selectedFile ? (
                     <code className="text-foreground">{selectedFile.originalContent}</code>
                   ) : (
-                    <span className="text-muted-foreground">Select a file to view content</span>
+                    <code className="text-muted-foreground">No file selected</code>
                   )}
                 </pre>
               </div>
-
               <div>
                 <h3 className="text-sm font-medium text-muted-foreground mb-2">Processed</h3>
                 <pre className="w-full h-[600px] p-4 font-mono text-xs bg-card border border-border rounded-lg overflow-auto whitespace-pre-wrap break-words">
-                  {selectedFile && selectedFile.status === 'completed' ? (
+                  {selectedFile ? (
                     <code className="text-foreground">{selectedFile.processedContent}</code>
-                  ) : selectedFile && selectedFile.status === 'processing' ? (
-                    <span className="text-blue-400">Processing...</span>
-                  ) : selectedFile && selectedFile.status === 'error' ? (
-                    <span className="text-red-400">Error processing file</span>
                   ) : (
-                    <span className="text-muted-foreground">Processed content will appear here...</span>
+                    <code className="text-muted-foreground">No file selected</code>
                   )}
                 </pre>
               </div>
