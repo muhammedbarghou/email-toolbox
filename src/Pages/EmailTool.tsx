@@ -419,34 +419,6 @@ const handleDownloadSingle = useCallback((fileId: string) => {
   URL.revokeObjectURL(url)
 }, [files])
 
-  const blob = new Blob([file.processedContent], { type: "text/plain" })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement("a")
-  a.href = url
-  a.download = `processed-${file.name.replace('.eml', '.txt')}` // Changed here
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
-}, [files])
-
-  const handleDownloadSingle = useCallback((fileId: string) => {
-    const file = files.find(f => f.id === fileId)
-    if (!file || file.status !== 'completed') {
-      return
-    }
-
-    const blob = new Blob([file.processedContent], { type: "text/plain" })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = `processed-${file.name}`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-  }, [files])
-
   const handleRemoveFile = useCallback((fileId: string) => {
     setFiles(prev => prev.filter(f => f.id !== fileId))
     if (selectedFileId === fileId) {
