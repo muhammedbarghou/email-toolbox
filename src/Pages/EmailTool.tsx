@@ -136,12 +136,12 @@ const useEmailProcessor = () => {
                 i++
                 currentHeader.push(lines[i].trimEnd())
               }
-            } else if (line.startsWith("Date:")) {
+} else if (line.startsWith("Date:")) {
               if (currentHeader.length > 0) {
                 outputLines.push(...currentHeader)
                 currentHeader = []
               }
-              outputLines.push("Date: [D=>%a, %d %b %Y %H:%M:%S] +0000")
+              outputLines.push(line)
             } else if (line.startsWith("To:")) {
               if (currentHeader.length > 0) {
                 outputLines.push(...currentHeader)
