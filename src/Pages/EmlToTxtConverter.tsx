@@ -20,7 +20,7 @@ export default function EmlToTxtConverter() {
   const [processedFiles, setProcessedFiles] = useState<ProcessedFile[]>([])
 
   const maxSize = 10 * 1024 * 1024 // 10MB
-  const maxFiles = 20
+  const maxFiles = 50
 
   const [
     { files, isDragging, errors },
