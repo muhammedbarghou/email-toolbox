@@ -12,6 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { ModeToggle } from "./mode-toggle"
 
 const navigationLinks = [
   { href: "/header-processor", label: "Header Processor", icon: InboxIcon },
@@ -119,6 +120,7 @@ export default function Navbar() {
         </NavigationMenu>
         {/* Right side */}
         <div className="flex flex-1 items-center justify-end gap-2">
+          <ModeToggle />
         </div>
       </div>
     </header>

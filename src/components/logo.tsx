@@ -6,7 +6,7 @@ export default function Logo() {
         alt="Logo"
         className="h-8 w-8 rounded-sm"
       />
-      <span className="font-bold text-lg">Toolbox</span>
+      <span className="font-bold text-lg">MailerTools</span>
     </div>
   )
 }

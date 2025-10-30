@@ -127,7 +127,7 @@ export default function EmailImageCombiner() {
       {!image ? (
         <label htmlFor={`upload-${type}`} className="cursor-pointer block">
           <Upload className="mx-auto mb-2 text-gray-400" size={32} />
-          <p className="text-sm font-medium text-gray-700">{label}</p>
+          <p className="text-sm font-medium text-gray-400">{label}</p>
           <p className="text-xs text-gray-500 mt-1">Click to upload</p>
         </label>
       ) : (
@@ -148,11 +148,11 @@ export default function EmailImageCombiner() {
   return (
     <div className="min-h-screen  p-8">
       <div className="max-w-6xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
-            <ImageIcon className="mx-auto mb-4 text-slate-600" size={48} />
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Email Image Combiner</h1>
-            <p className="text-gray-600">
+            <ImageIcon className="mx-auto mb-4" size={48} />
+            <h1 className="text-3xl font-bold  mb-2">Email Image Combiner</h1>
+            <p className="text-gray-300">
               Combine your email offer with legal footers into one image
             </p>
           </div>
