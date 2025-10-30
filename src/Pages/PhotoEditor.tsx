@@ -1,5 +1,6 @@
 import { useState, useRef, type ChangeEvent } from 'react';
 import { Download, Upload, X, Image as ImageIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface ImageData {
   offer: string | null;
@@ -115,7 +116,7 @@ export default function EmailImageCombiner() {
   }
 
   const ImageUploadBox = ({ type, label, image }: ImageUploadBoxProps) => (
-    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-slate-600 transition-colors">
       <input
         type="file"
         accept="image/*"
@@ -134,7 +135,7 @@ export default function EmailImageCombiner() {
           <img src={image} alt={label} className="max-h-40 mx-auto rounded" />
           <button
             onClick={() => removeImage(type)}
-            className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+            className="absolute top-0 right-0 bg-slate-500 text-white rounded-full p-1 hover:bg-slate-600"
           >
             <X size={16} />
           </button>
@@ -145,11 +146,11 @@ export default function EmailImageCombiner() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
+    <div className="min-h-screen  p-8">
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
-            <ImageIcon className="mx-auto mb-4 text-blue-600" size={48} />
+            <ImageIcon className="mx-auto mb-4 text-slate-600" size={48} />
             <h1 className="text-3xl font-bold text-gray-800 mb-2">Email Image Combiner</h1>
             <p className="text-gray-600">
               Combine your email offer with legal footers into one image
@@ -158,18 +159,19 @@ export default function EmailImageCombiner() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <ImageUploadBox type="offer" label="Email Offer" image={images.offer} />
-            <ImageUploadBox type="footer1" label="Footer 1" image={images.footer1} />
-            <ImageUploadBox type="footer2" label="Footer 2" image={images.footer2} />
+            <ImageUploadBox type="footer1" label="ADV UNSUB" image={images.footer1} />
+            <ImageUploadBox type="footer2" label="OPTDOWN" image={images.footer2} />
           </div>
 
           <div className="flex justify-center mb-8">
-            <button
+            <Button
               onClick={combineImages}
+              size={"lg"}
               disabled={!images.offer || !images.footer1 || !images.footer2 || isProcessing}
-              className="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+              className="bg-slate-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-slate-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
             >
               {isProcessing ? 'Processing...' : 'Combine Images'}
-            </button>
+            </Button>
           </div>
 
           {combinedImage && (
@@ -177,13 +179,13 @@ export default function EmailImageCombiner() {
               <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">Combined Result</h2>
               <div className="bg-gray-50 rounded-lg p-6 max-w-2xl mx-auto">
                 <img src={combinedImage} alt="Combined" className="w-full rounded shadow-lg" />
-                <button
+                <Button
                   onClick={downloadImage}
-                  className="mt-4 w-full bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                  className="mt-4 w-full bg-slate-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-slate-700 transition-colors flex items-center justify-center gap-2"
                 >
                   <Download size={20} />
                   Download Combined Image
-                </button>
+                </Button>
               </div>
             </div>
           )}
