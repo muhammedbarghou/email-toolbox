@@ -1,4 +1,4 @@
-import { InboxIcon, ZapIcon } from "lucide-react"
+import { InboxIcon, ZapIcon, MailsIcon, PanelsRightBottom } from "lucide-react"
 import Logo from "@/components/logo"
 import { Button } from "@/components/ui/button"
 import {
@@ -16,7 +16,8 @@ import {
 const navigationLinks = [
   { href: "/header-processor", label: "Header Processor", icon: InboxIcon },
   { href: "/eml-to-txt-converter", label: "EML to TXT Converter", icon: ZapIcon },
-  { href: "/ip-comparator", label: "IP Comparator", icon: ZapIcon },
+  { href: "/ip-comparator", label: "IP Comparator", icon: MailsIcon },
+  { href: "/photo-editor", label: "Photo Editor", icon: PanelsRightBottom },
 ]
 
 export default function Navbar() {

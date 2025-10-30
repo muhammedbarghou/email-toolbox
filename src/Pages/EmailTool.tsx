@@ -22,6 +22,7 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { toast } from "sonner"
 
 interface FileItem {
   id: string
@@ -321,12 +322,12 @@ export default function EmailHeaderProcessor() {
       const fileArray = Array.from(fileList).filter((file) => file.name.endsWith(".eml"))
 
       if (fileArray.length === 0) {
-        alert("Please upload .eml files only")
+        toast.message('Please upload a file')
         return
       }
 
-      if (files.length + fileArray.length > 20) {
-        alert("Maximum 20 files allowed")
+      if (files.length + fileArray.length > 50) {
+        toast.message('You can upload a maximum of 50 files')
         return
       }
 
