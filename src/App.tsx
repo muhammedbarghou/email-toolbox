@@ -7,6 +7,7 @@ import { Toaster } from 'sonner'
 import { Suspense } from 'react'
 import { Home } from './Pages/home'
 import PhotoEditor from './Pages/PhotoEditor'
+
 function App() {
   return (
     <main className="min-h-screen flex flex-col">
