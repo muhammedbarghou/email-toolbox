@@ -1,10 +1,8 @@
 
 import { cn } from "@/lib/utils";
-import { buttonVariants,Button } from "@/components/ui/button";
-import { useNavigate } from "react-router";
+import { buttonVariants } from "@/components/ui/button";
 
 const Home = () => {
-  const navigate = useNavigate();
   return (
     <section className="min-h-screen flex flex-col p-4 md:p-8">
       <div className="absolute inset-x-0 top-0 flex h-full w-full items-center justify-center opacity-100">
@@ -97,13 +95,7 @@ const Home = () => {
         </div>
       </div>
       <div className="flex items-center justify-center mt-10 gap-4">
-        {/* <Button onClick={() => navigate('/contact-us')}>
-          About Us
-        </Button>
-        <Button variant="outline" onClick={() => navigate('/contact-us')}>
-          Contact Us
-        </Button> */}
-        </div>
+      </div>
     </section>
   );
 };
